@@ -1,6 +1,6 @@
-﻿namespace HealthSync.BuildingBlocks.Serilogging;
+﻿namespace HealthSync.BuildingBlocks.Logging.Options;
 
-public sealed class SerilogOptions
+public sealed class LoggingOptions
 {
     public bool Enabled { get; set; }
     public string? ElasticSearchUrl { get; set; }
