@@ -5,14 +5,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace HealthSync.BuildingBlocks.Serilogging.Extensions;
+namespace HealthSync.BuildingBlocks.Logging.Extensions;
 
-public static class DependencyInjectionExtensions
+public static class LoggingExtensions
 {
     public static IHostApplicationBuilder AddCustomSerilog(
         this IHostApplicationBuilder builder,
         Action<LoggerConfiguration>? extraConfigure = null,
-        Action<SerilogOptions>? configurator = null
+        Action<LoggingOptions>? configurator = null
     )
     {
         var serilogOptions =
