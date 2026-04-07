@@ -15,11 +15,7 @@ namespace HealthSync.BuildingBlocks.MongoDB.Options
         [Range(1, 300)]
         public int ConnectTimeoutSeconds { get; set; } = 30;
 
-        public int BaseRetryDelayInSeconds { get; set; } = 1;
-
         public int MaxRetryAttempts { get; set; } = 3;
-
-        public int MaxRetryDelayCapInSeconds { get; set; } = 30;
 
         public int MaxConnectionIdleTimeSeconds { get; set; } = 300;
 
