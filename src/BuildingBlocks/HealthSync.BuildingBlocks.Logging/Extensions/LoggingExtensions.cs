@@ -1,5 +1,6 @@
 using Elastic.Ingest.Elasticsearch;
 using Elastic.Serilog.Sinks;
+using HealthSync.BuildingBlocks.Logging.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -16,8 +17,8 @@ public static class LoggingExtensions
     )
     {
         var serilogOptions =
-            builder.Configuration.GetSection("Serilog").Get<SerilogOptions>()
-            ?? new SerilogOptions();
+            builder.Configuration.GetSection("Serilog").Get<LoggingOptions>()
+            ?? new LoggingOptions();
 
         configurator?.Invoke(serilogOptions);
 
