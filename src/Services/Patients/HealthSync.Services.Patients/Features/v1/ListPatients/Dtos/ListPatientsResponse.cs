@@ -1,4 +1,4 @@
-namespace HealthSync.Services.Patients.Features.v1.GetPatient.Dtos
+namespace HealthSync.Services.Patients.Features.v1.ListPatients.Dtos
 {
     public class ListPatientsResponse
     {
