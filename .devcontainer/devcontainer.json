@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
 {
-  "name": "HealthSync Dev Container",
+  "name": "HealthSync Api",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "app",
+  "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "features": {
     "ghcr.io/devcontainers/features/copilot-cli:1": {},
