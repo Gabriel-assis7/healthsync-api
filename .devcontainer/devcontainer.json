@@ -1,0 +1,112 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
+{
+  "name": "HealthSync Api",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/copilot-cli:1": {},
+    "ghcr.io/devcontainers/features/dotnet:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "version": "1.1"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    },
+    "ghcr.io/cirolosapio/devcontainers-features/alpine-ohmyzsh:0": {},
+    "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/powershell": {
+      "version": "latest"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.defaultProfile.windows": "PowerShell",
+        "editor.minimap.enabled": false,
+        "workbench.editor.empty.hint": "hidden",
+        "workbench.layoutControl.enabled": false,
+        "workbench.editor.labelFormat": "short",
+        "workbench.colorTheme": "Kanso Zen",
+        "editor.fontSize": 16,
+        "symbols.hidesExplorerArrows": false,
+        "workbench.iconTheme": "symbols",
+        "workbench.navigationControl.enabled": false,
+        "workbench.productIconTheme": "feather-vscode",
+        "git.autofetch": true,
+        "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
+        "editor.formatOnSave": true,
+        "editor.lineHeight": 1.8,
+        "editor.rulers": [80, 120],
+        "window.commandCenter": false,
+        "workbench.startupEditor": "newUntitledFile",
+        "explorer.compactFolders": false,
+        "editor.semanticHighlighting.enabled": false,
+        "editor.scrollbar.vertical": "auto",
+        "editor.scrollbar.horizontal": "auto",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "window.titleBarStyle": "custom",
+        "explorer.confirmDragAndDrop": false,
+        "explorer.confirmDelete": false,
+        "breadcrumbs.enabled": false
+      },
+      "extensions": [
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "pshaddel.conventional-branch",
+        "vivaxy.vscode-conventional-commits",
+        "ms-azuretools.vscode-docker",
+        "melishev.feather-vscode",
+        "vector-of-bool.gitflow",
+        "Webhooked.kanso-theme",
+        "DavidAnson.vscode-markdownlint",
+        "ms-vscode.powershell",
+        "mutantdino.resourcemonitor",
+        "miguelsolorio.symbols",
+        "Gruntfuggly.todo-tree",
+        "DotJoshJohnson.xml",
+        "redhat.vscode-yaml",
+        "ms-ossdata.vscode-pgsql",
+        "ms-vscode.makefile-tools",
+        "mhutchie.git-graph",
+        "usernamehw.errorlens",
+        "mikestead.dotenv",
+        "fill-labs.dependi",
+        "csharpier.csharpier-vscode",
+        "ms-azuretools.vscode-containers",
+        "steoates.autoimport",
+        "eamodio.gitlens",
+        "formulahendry.code-runner",
+        "github.vscode-github-actions",
+        "GitHub.copilot-chat",
+        "humao.rest-client"
+      ]
+    }
+  },
+
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "8gb",
+    "storage": "32gb"
+  }
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [5000, 5001, 5432],
+  // "portsAttributes": {
+  //		"5001": {
+  //			"protocol": "https"
+  //		}
+  // }
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "dotnet --info",
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}
