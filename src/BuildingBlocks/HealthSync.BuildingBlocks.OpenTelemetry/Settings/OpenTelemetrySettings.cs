@@ -7,6 +7,7 @@ namespace HealthSync.BuildingBlocks.OpenTelemetry.Settings
         public string? ServiceVersion { get; set; }
         public string? OtlpEndpoint { get; set; }
         public string[]? Sources { get; set; }
-        public bool? ExportToJaeger { get; set; }
+        public JaegerSettings? Jaeger { get; set; }
+        public bool ExportToJaeger { get; set; } = true;
     }
 }

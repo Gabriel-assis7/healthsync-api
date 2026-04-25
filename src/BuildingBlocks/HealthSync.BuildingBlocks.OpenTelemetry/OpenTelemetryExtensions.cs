@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -63,7 +64,7 @@ public static class AddObservabilityExtensions
                 {
                     opt.Filter = context =>
                     {
-                        // Exclude health check endpoints from tracing
+                        // Exclude  endpoints from tracing
                         var basePath = context.Request.Path;
 
                         return !basePath.StartsWithSegments("/health")
@@ -72,12 +73,49 @@ public static class AddObservabilityExtensions
                 });
                 t.AddHttpClientInstrumentation();
 
-                if (!string.IsNullOrWhiteSpace(options.ServiceName) && options.Sources?.Length > 0)
+                if (options.Sources?.Length > 0)
                 {
                     t.AddSource(options.Sources);
                 }
 
-                //TODO: Add support for Jaeger and other exporters based on configuration
+                switch (options)
+                {
+                    case { ExportToJaeger: true, Jaeger: not null }:
+                        t.AddOtlpExporter(opt =>
+                        {
+                            var uri = new Uri(options.Jaeger.Endpoint);
+                            opt.Endpoint = uri;
+                            opt.Protocol = options.Jaeger.Protocol?.ToLower() switch
+                            {
+                                "grpc" => OtlpExportProtocol.Grpc,
+                                "http" or "http/protobuf" => OtlpExportProtocol.HttpProtobuf,
+                                _ => uri.Port == 4318
+                                    ? OtlpExportProtocol.HttpProtobuf
+                                    : OtlpExportProtocol.Grpc,
+                            };
+                            if (!string.IsNullOrWhiteSpace(options.Jaeger.Headers))
+                            {
+                                opt.Headers = options.Jaeger.Headers;
+                            }
+                        });
+                        break;
+
+                    case { OtlpEndpoint: not null }:
+                        t.AddOtlpExporter(opt =>
+                        {
+                            var uri = new Uri(options.OtlpEndpoint);
+                            opt.Endpoint = uri;
+
+                            opt.Protocol = uri.Port switch
+                            {
+                                4317 => OtlpExportProtocol.Grpc,
+                                4318 => OtlpExportProtocol.HttpProtobuf,
+                                _ => OtlpExportProtocol.Grpc,
+                            };
+                        });
+                        break;
+                }
+                ;
             });
 
         return services;
@@ -88,5 +126,8 @@ public static class AddObservabilityExtensions
     public static IServiceCollection AddOpenTelemetryMetrics(
         this IServiceCollection services,
         ObservabilityOptions options
-    ) { }
+    )
+    {
+        
+    }
 }
