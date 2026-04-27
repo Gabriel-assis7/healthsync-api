@@ -44,6 +44,7 @@ public static class AddObservabilityExtensions
     }
 
     // https://opentelemetry.io/docs/languages/dotnet/traces/getting-started-aspnetcore/
+    // https://opentelemetry.io/docs/languages/dotnet/resources/#adding-resources-in-code
     public static IServiceCollection AddOpenTelemetryTracing(
         this IServiceCollection services,
         ObservabilityOptions options
@@ -53,10 +54,29 @@ public static class AddObservabilityExtensions
             .AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
-                resource.AddService(
-                    serviceName: options.ServiceName,
-                    serviceVersion: options.ServiceVersion
-                );
+                resource
+                    .AddService(
+                        serviceName: options.ServiceName,
+                        serviceVersion: options.ServiceVersion
+                    )
+                    .AddAttributes(
+                        new Dictionary<string, object>
+                        {
+                            ["deployment.environment"] = options.Environment,
+                            ["service.namespace"] = options.ServiceNamespace ?? string.Empty,
+                            ["service.instance.id"] =
+                                Environment.GetEnvironmentVariable("HOSTNAME")
+                                ?? Guid.NewGuid().ToString(),
+                            ["service.host.name"] =
+                                Environment.GetEnvironmentVariable("HOSTNAME")
+                                ?? Environment.MachineName,
+                            ["service.host.type"] =
+                                Environment.GetEnvironmentVariable("HOST_TYPE") ?? string.Empty,
+                            ["service.process.id"] = Environment.ProcessId,
+                        }
+                    )
+                    .AddTelemetrySdk()
+                    .AddEnvironmentVariableDetector();
             })
             .WithTracing(t =>
             {
@@ -64,11 +84,11 @@ public static class AddObservabilityExtensions
                 {
                     opt.Filter = context =>
                     {
-                        // Exclude  endpoints from tracing
+                        // Exclude endpoints from tracing
                         var basePath = context.Request.Path;
 
-                        return !basePath.StartsWithSegments("/health")
-                            && !basePath.StartsWithSegments("/metrics");
+                        return !basePath.StartsWithSegments("/api/v1/health")
+                            && !basePath.StartsWithSegments("/api/v1/metrics");
                     };
                 });
                 t.AddHttpClientInstrumentation();
@@ -114,6 +134,9 @@ public static class AddObservabilityExtensions
                             };
                         });
                         break;
+                    case { ExportToConsole: true }:
+                        t.AddConsoleExporter();
+                        break;
                 }
                 ;
             });
@@ -126,8 +149,5 @@ public static class AddObservabilityExtensions
     public static IServiceCollection AddOpenTelemetryMetrics(
         this IServiceCollection services,
         ObservabilityOptions options
-    )
-    {
-        
-    }
+    ) { }
 }
