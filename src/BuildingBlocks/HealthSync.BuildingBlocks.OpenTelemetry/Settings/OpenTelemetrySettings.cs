@@ -12,5 +12,6 @@ namespace HealthSync.BuildingBlocks.OpenTelemetry.Settings
         public JaegerSettings? Jaeger { get; set; }
         public bool ExportToJaeger { get; set; } = true;
         public bool ExportToConsole { get; set; } = false;
+        public double SampleRate { get; set; } = 0.1; // 10%
     }
 }
