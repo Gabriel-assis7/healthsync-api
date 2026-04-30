@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using HealthSync.BuildingBlocks.OpenTelemetry.Settings;
+using OpenTelemetry.Exporter.Prometheus;
 using OpenTelemetry.Metrics;
 
 namespace HealthSync.BuildingBlocks.OpenTelemetry.Configuration;
@@ -14,16 +15,16 @@ public static class MetricsConfiguration
             .AddHttpClientInstrumentation()
             .AddAspNetCoreInstrumentation();
 
-        switch (options)
+        if (options.Metrics?.ExportToPrometheus == true)
         {
-            case { Metrics.ExportToPrometheus: true }:
-                {
-                    // TODO: Implement Prometheus exporter configuration
-                }
-                break;
-            default:
-                m.AddConsoleExporter();
-                break;
+            m.AddPrometheusExporter(opt =>
+            {
+                opt.ScrapeEndpointPath = options.Metrics.PrometheusEndpoint ?? "/metrics";
+            });
+        }
+        else
+        {
+            m.AddConsoleExporter();
         }
     }
 
