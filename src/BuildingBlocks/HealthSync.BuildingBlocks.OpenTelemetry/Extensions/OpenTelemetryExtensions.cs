@@ -63,7 +63,8 @@ public static class AddObservabilityExtensions
                     .AddTelemetrySdk()
                     .AddEnvironmentVariableDetector();
             })
-            .WithTracing(t => TracingConfiguration.ConfigureTracing(t, options));
+            .WithTracing(t => TracingConfiguration.ConfigureTracing(t, options))
+            .WithMetrics(m => MetricsConfiguration.ConfigureMetrics(m, options));
 
         return builder;
     }
