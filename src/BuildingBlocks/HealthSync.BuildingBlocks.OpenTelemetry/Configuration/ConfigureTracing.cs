@@ -66,15 +66,8 @@ namespace HealthSync.BuildingBlocks.OpenTelemetry.Configuration
                         };
                     });
                     break;
-                case { ExportToConsole: true }:
-                    t.AddConsoleExporter();
-                    break;
                 default:
-                    // If there is no exporter configured, we set to console based on environment for easy local development and debugging
-                    if (options.Environment == "Development")
-                    {
-                        t.AddConsoleExporter();
-                    }
+                    t.AddConsoleExporter();
                     break;
             }
             ;
