@@ -4,7 +4,7 @@ namespace HealthSync.BuildingBlocks.Redis.Settings;
 
 public class RedisOptions
 {
-    public bool? Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
     public string? ClientName { get; set; }
     public string? User { get; set; }
     public string? Password { get; set; }
@@ -17,4 +17,5 @@ public class RedisOptions
     public RetryPolicyOptions? ReconnectRetryPolicy { get; set; }
     public int SyncTimeout { get; set; } = 5000;
     public int AsyncTimeout { get; set; } = 5000;
+    public int KeepAlive { get; set; } = 30;
 }
