@@ -15,13 +15,9 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest"
     },
-    "ghcr.io/cirolosapio/devcontainers-features/alpine-ohmyzsh:0": {},
     "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "configureZshAsDefaultShell": true
-    },
-    "ghcr.io/devcontainers/features/powershell": {
-      "version": "latest"
     }
   },
 
@@ -90,6 +86,10 @@
     }
   },
 
+  "postCreateCommand": ".devcontainer/scripts/post-create.sh",
+  "postStartCommand": ".devcontainer/scripts/post-start.sh",
+  "postAttachCommand": ".devcontainer/scripts/post-attach.sh",
+
   "hostRequirements": {
     "cpus": 2,
     "memory": "8gb",
@@ -101,12 +101,6 @@
   // "portsAttributes": {
   //		"5001": {
   //			"protocol": "https"
-  //		}
   // }
-
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "dotnet --info",
-
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
+  // }
 }
