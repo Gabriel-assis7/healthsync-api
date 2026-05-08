@@ -18,6 +18,9 @@
     "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
     }
   },
 
