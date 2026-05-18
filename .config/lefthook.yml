@@ -1,0 +1,5 @@
+# https://lefthook.dev/configuration/
+commit-msg:
+  commands:
+    commit-lint:
+      run: npx commitlint --edit {1}
