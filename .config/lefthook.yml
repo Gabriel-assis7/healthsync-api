@@ -1,0 +1,16 @@
+# https://lefthook.dev/configuration/
+commit-msg:
+  commands:
+    commit-lint:
+      run: npx commitlint --edit {1}
+
+pre-commit:
+  parallel: true
+  commands:
+    gitleaks:
+      run: |
+         docker run --rm \
+           -v "$PWD:/repo" \
+           -w /repo \
+           zricethezav/gitleaks:latest \
+           gitleaks protect --staged

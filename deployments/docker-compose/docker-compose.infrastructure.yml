@@ -1,0 +1,17 @@
+# https://github.com/vegasbrianc/prometheus/blob/master/docker-compose.yml
+services:
+
+  prometheus:
+    image: prom/prometheus:v3.6.0
+    container_name: prometheus
+    volumes:
+      - ./../configs/prometheus.yml:/etc/prometheus/prometheus.yml  
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - "--storage.tsdb.path=/prometheus"
+      - "--log.level=debug"
+    networks:
+      - infrastructure

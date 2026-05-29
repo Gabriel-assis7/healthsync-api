@@ -1,0 +1,86 @@
+# ref: https://github.com/grafana/intro-to-mltp/blob/main/grafana/provisioning/datasources/datasources.yaml
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#run-multiple-grafana-instances
+
+apiVersion: 1
+
+datasources:
+# https://grafana.com/docs/grafana/latest/datasources/prometheus/configure/#provision-the-prometheus-data-source
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus-uid
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    basicAuth: false
+    jsonData:
+      httpMethod: POST
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 3.3.0
+      cacheLevel: 'High'
+      disableRecordingRules: true
+      seriesEndpoint: false
+      timeInterval: 10s # Prometheus scrape interval
+      incrementalQueryOverlapWindow: 120s
+
+  - name: Loki
+    type: loki
+    uid: loki-uid
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      derivedFields:
+        - datasourceUid: jaeger-uid
+          matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+          name: traceId
+          url: '$${__value.raw}'
+
+# https://grafana.com/docs/grafana/latest/datasources/jaeger/configure/#provision-the-data-source
+  - name: Jaeger
+    type: jaeger
+    uid: jaeger-uid
+    access: proxy
+    url: http://jaeger:16686
+    isDefault: false
+    basicAuth: false
+    jsonData:
+      nodeGraph:
+        enabled: true
+      serviceMap:
+        datasourceUid: 'prometheus-uid'
+      tracesToLogsV2:
+        datasourceUid: loki-uid
+        filterByTraceID: false
+        filterBySpanID: false
+        customQuery: true
+        query: 'method="$${__span.tags.method}"'
+        spanEndTimeShift: "500ms"
+        spanStartTimeShift: "-500ms"
+        tags:
+          - key: service.name
+          - key: environment.name
+          - key: pod.namespace.name
+        traceIdTimeParams:
+          enaled: true
+        spanBar:
+          type: 'Duration'
+
+  - name: Kibana
+    type: elasticsearch
+    uid: kibana-uid
+    access: proxy
+    url: http://elasticsearch:9200
+    editable: true
+    isDefault: false
+    jsonData:
+      esVersion: 7
+      timeField: "@timestamp"
+      index: '[otel-]YYYY.MM.DD'
+      interval: Daily
+      logMessageField: message
+      logLevelField: fields.level
+      dataLinks:
+        - datasourceUid: jaeger-uid
+          field: traceID
+          url: '$${__value.raw}'

@@ -20,26 +20,6 @@ project.lock.json
 project.assets.json
 
 # ============================================================================
-# IDE & Editor Files
-# ============================================================================
-# Visual Studio
-.vs/
-*.sln.iml
-.vscode/
-*.code-workspace
-
-# JetBrains (Rider)
-.idea/
-*.sln.iml
-*.swp
-*.swo
-*~
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# ============================================================================
 # User-Specific Files & Local Configuration
 # ============================================================================
 *.user
@@ -48,23 +28,6 @@ project.assets.json
 appsettings.local.json
 appsettings.*.local.json
 local.settings.json
-
-# ============================================================================
-# Operating System Files
-# ============================================================================
-# Windows
-Thumbs.db
-Desktop.ini
-*.lnk
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-
-# Linux
-.directory
 
 # ============================================================================
 # Testing & Coverage
@@ -88,13 +51,11 @@ __pycache__/
 # ============================================================================
 # Environment Variables & Secrets
 # ============================================================================
+secrets/
+.security/
 .env
 .env.local
 .env.*.local
-*.pem
-*.key
-*.p12
-secrets/
 
 # ============================================================================
 # Build System Files
@@ -108,9 +69,3 @@ out/
 # Docker
 # ============================================================================
 docker-compose.override.yml
-
-# ============================================================================
-# Azure Artifacts
-# ============================================================================
-.azure/
-publish/

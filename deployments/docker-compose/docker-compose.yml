@@ -1,0 +1,113 @@
+services:
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: on-failure
+    user: root
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./../configs/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - healthsync
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.14.3
+  #   container_name: kibana
+  #   restart: on-failure
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   ports:
+  #     - "5601:5601"
+  #   networks:
+  #     - healthsync
+  #   depends_on:
+  #     - elasticsearch
+
+  jaeger:
+    container_name: jaeger
+    restart: on-failure
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+    networks:
+      - healthsync
+
+  grafana:
+    container_name: grafana
+    restart: on-failure
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - healthsync
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+# elasticsearch:
+#    container_name: elastic_search
+#    restart: on-failure
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+#    environment:
+#      - discovery.type=single-node
+#      - xpack.monitoring.enabled=true
+#      - xpack.watcher.enabled=false
+#      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+#    volumes:
+#      - elastic-data:/usr/share/elasticsearch/data
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - healthsync
+
+  node_exporter:
+    container_name: node_exporter
+    restart: on-failure
+    image: prom/node-exporter
+    ports:
+      - "9101:9100"
+    networks:
+      - healthsync
+
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    restart: on-failure
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    networks:
+      - healthsync
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - healthsync
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+networks:
+  healthsync:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  redis:
+  grafana_data:
