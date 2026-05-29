@@ -7,7 +7,7 @@ on:
       - "feature/**"
       - "hotfix/**"
     paths:
-      - "src/BuildingBlocks/*"
+      - "src/BuildingBlocks/**"
 
   pull_request:
     branches:
@@ -21,12 +21,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: 8.0
 
       - run: dotnet restore
       - run: dotnet build --no-restore -warnaserror
-      - run: dotnet test --no-build || echo "No tests found."
+      - run: dotnet test --no-build --verbosity normal
