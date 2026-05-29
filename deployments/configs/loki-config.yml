@@ -1,0 +1,48 @@
+# https://grafana.com/docs/loki/latest/configure/examples/configuration-examples/#1-local-configuration-exampleyaml
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+  replication_factor: 1
+  path_prefix: /tmp/loki
+
+schema_config:
+  configs:
+    - from: 2020-05-15
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  filesystem:
+    directory: /tmp/loki/chunks
+
+# OTLP log ingestion configurations
+limits_config:
+  resource_attributes:
+    ignore_defaults: true
+  attributes_config:
+    - action: index_label
+      attributes:
+        - key: service.name
+        - key: deployment.environment
+        - key: k8s.namespace.name
+  log_attributes:
+    - action: structured_metadata
+      attributes:
+        - request.id
+        - trace.id
+    - action: drop
+      attributes:
+        - thread.id
+        - process.pid

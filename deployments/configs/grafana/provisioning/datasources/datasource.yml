@@ -58,14 +58,13 @@ datasources:
         spanEndTimeShift: "500ms"
         spanStartTimeShift: "-500ms"
         tags:
-          - key: namespace
-          - key: instance
-          - key: pod
-      derivedFields:
-        - datasourceUid: loki-uid
-          matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
-          name: traceId
-          url: '$${__value.raw}'
+          - key: service.name
+          - key: environment.name
+          - key: pod.namespace.name
+        traceIdTimeParams:
+          enaled: true
+        spanBar:
+          type: 'Duration'
 
   - name: Kibana
     type: elasticsearch
