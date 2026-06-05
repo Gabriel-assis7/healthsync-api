@@ -9,8 +9,8 @@ pre-commit:
   commands:
     gitleaks:
       run: |
-         docker run --rm \
-           -v "$PWD:/repo" \
-           -w /repo \
-           zricethezav/gitleaks:latest \
-           gitleaks protect --staged
+        docker run --rm \
+          -v "$PWD:/repo" \
+          -w /repo \
+          zricethezav/gitleaks:latest \
+          git --staged

@@ -1,4 +1,4 @@
-# HealthSync API — Personal Learning Project
+# HealthSync API
 
 > Note: This is a personal, learning-focused project aimed at exploring scalable distributed systems, cloud-native architecture, and observability. The repository is under active development and many pieces are intentionally experimental.
 
@@ -22,66 +22,6 @@ This repository follows a small microservice-style layout with reusable building
 - Data: MongoDB as primary document store; Redis for caching.
 - Observability: OpenTelemetry instrumentation, Prometheus (metrics), Jaeger (traces), Grafana (dashboards), Loki/Elasticsearch for logs.
 - Local infra: Docker Compose manifests under `deployments/docker-compose` to bring up Prometheus, Grafana, Jaeger, MongoDB, Redis and exporters.
-
-**Mermaid architecture diagram**
-
-```mermaid
-graph LR
-  subgraph Clients
-    C[Clients / API Consumers]
-  end
-
-  subgraph Services
-    S1[Doctors Service]
-    S2[Patients Service]
-  end
-
-  subgraph Messaging
-    MQ[RabbitMQ]
-  end
-
-  subgraph Data
-    MDB[MongoDB]
-    RED[Redis Cache]
-  end
-
-  subgraph Observability
-    OTEL[OpenTelemetry]
-    JG[Jaeger]
-    PR[Prometheus]
-    GF[Grafana]
-    LK[Loki]
-    NE[Node Exporter]
-  end
-
-  C -->|HTTP/gRPC| S1
-  C -->|HTTP/gRPC| S2
-
-  S1 -->|read/write| MDB
-  S2 -->|read/write| MDB
-  S1 -->|cache| RED
-  S2 -->|cache| RED
-  S1 -->|publish/consume| MQ
-  S2 -->|publish/consume| MQ
-
-  S1 --> OTEL
-  S2 --> OTEL
-  OTEL --> JG
-  OTEL --> PR
-  PR --> GF
-  JG --> GF
-  LK --> GF
-  NE --> PR
-
-  subgraph Local Infra
-    DC[docker-compose (deployments/docker-compose)]
-    DC --> PR
-    DC --> GF
-    DC --> JG
-    DC --> MDB
-    DC --> RED
-  end
-```
 
 ## Technologies, Libraries and Versions
 
@@ -123,34 +63,6 @@ graph LR
 
 - **Terraform (infrastructure modules)**
   - Terraform module skeletons exist under `infrastructure/modules/networking` (AWS VPC/subnets resources present; see files in that folder).
-
-Files that help locate these settings:
-- [src/Directory.Build.Props](src/Directory.Build.Props)
-- [package.json](package.json)
-- [deployments/docker-compose/docker-compose.yml](deployments/docker-compose/docker-compose.yml)
-- [deployments/docker-compose/docker-compose.infrastructure.yml](deployments/docker-compose/docker-compose.infrastructure.yml)
-- [deployments/configs/grafana/provisioning/datasources/datasource.yml](deployments/configs/grafana/provisioning/datasources/datasource.yml)
-
-## Observability Stack
-
-This project includes an observability-focused local stack (docker-compose):
-
-- **OpenTelemetry**: instrumentation libraries are included in the building blocks to emit traces and metrics.
-- **Prometheus**: metrics scraping and storage (`deployments/docker-compose/docker-compose.yml`, `deployments/configs/prometheus.yml`).
-- **Grafana**: dashboards and provisioning are included under `deployments/configs/grafana/provisioning` (datasource provisioning for Prometheus, Jaeger, Loki).
-- **Jaeger**: tracing backend (all-in-one used in compose).
-- **Loki / Elasticsearch**: Grafana provisioning references Loki and Elasticsearch; a Loki config file exists under `deployments/configs/loki-config.yml` (Loki service is referenced in provisioning but not enabled by default in the main compose).
-- **Node exporter**: OS metrics exporter for Prometheus.
-
-See `deployments/docker-compose/docker-compose.yml` and `deployments/configs` for the local observability configuration.
-
-## Infrastructure
-
-There is an initial Terraform networking module under `infrastructure/modules/networking` which contains VPC, subnet and region helpers intended for future AWS provisioning. These files are scaffolding for the eventual infrastructure-as-code workflow:
-
-- [infrastructure/modules/networking](infrastructure/modules/networking)
-
-At the moment the Terraform code is module-level scaffolding (variables, locals, VPC/subnet resources) and should be reviewed/extended before use.
 
 ## Roadmap & Planned Features
 
