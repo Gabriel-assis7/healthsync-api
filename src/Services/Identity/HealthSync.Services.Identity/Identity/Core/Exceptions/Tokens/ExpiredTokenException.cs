@@ -19,18 +19,18 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
             ExpiresAt = null;
         }
 
-        public ExpiredTokenException(string? tokenType, DateTime expiresAt, string? message = null)
+        public ExpiredTokenException(string? tokenType, DateTimeOffset expiresAt, string? message = null)
             : base(tokenType, $"Token expired at {expiresAt:O}. {message}")
         {
             ExpiresAt = expiresAt;
         }
 
-        public ExpiredTokenException(string? tokenType, DateTime expiresAt, string? message, Exception? innerException)
+        public ExpiredTokenException(string? tokenType, DateTimeOffset expiresAt, string? message, Exception? innerException)
             : base(tokenType, $"Token expired at {expiresAt:O}. {message}", innerException)
         {
             ExpiresAt = expiresAt;
         }
 
-        public DateTime? ExpiresAt { get; private set; }
+        public DateTimeOffset? ExpiresAt { get; private set; }
     }
 }

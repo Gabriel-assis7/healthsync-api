@@ -9,34 +9,34 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
     /// Inherits from InvalidTokenException to integrate with token validation infrastructure.
     /// </summary>
     [Serializable]
-    public sealed class UnexpectedTokenType : InvalidTokenException
+    public sealed class UnexpectedTokenTypeException : InvalidTokenException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnexpectedTokenType"/> class.
+        /// Initializes a new instance of the <see cref="UnexpectedTokenTypeException"/> class.
         /// </summary>
-        public UnexpectedTokenType() { }
+        public UnexpectedTokenTypeException() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnexpectedTokenType"/> class with a message.
+        /// Initializes a new instance of the <see cref="UnexpectedTokenTypeException"/> class with a message.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public UnexpectedTokenType(string? message)
+        public UnexpectedTokenTypeException(string? message)
             : base(message) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnexpectedTokenType"/> class with a message and inner exception.
+        /// Initializes a new instance of the <see cref="UnexpectedTokenTypeException"/> class with a message and inner exception.
         /// </summary>
         /// <param name="message">The error message.</param>
         /// <param name="innerException">The inner exception that caused this exception.</param>
-        public UnexpectedTokenType(string? message, Exception? innerException)
+        public UnexpectedTokenTypeException(string? message, Exception? innerException)
             : base(message, innerException) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnexpectedTokenType"/> class with expected and actual token types.
+        /// Initializes a new instance of the <see cref="UnexpectedTokenTypeException"/> class with expected and actual token types.
         /// </summary>
         /// <param name="expectedTokenType">The type of token that was expected (e.g., "AccessToken").</param>
         /// <param name="actualTokenType">The type of token that was provided (e.g., "RefreshToken").</param>
-        public UnexpectedTokenType(string? expectedTokenType, string? actualTokenType)
+        public UnexpectedTokenTypeException(string? expectedTokenType, string? actualTokenType)
             : base($"Expected token type '{expectedTokenType}' but received '{actualTokenType}'.")
         {
             ExpectedTokenType = expectedTokenType;
@@ -44,12 +44,12 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnexpectedTokenType"/> class with token types and inner exception.
+        /// Initializes a new instance of the <see cref="UnexpectedTokenTypeException"/> class with token types and inner exception.
         /// </summary>
         /// <param name="expectedTokenType">The type of token that was expected.</param>
         /// <param name="actualTokenType">The type of token that was provided.</param>
         /// <param name="innerException">The inner exception that caused this exception.</param>
-        public UnexpectedTokenType(string? expectedTokenType, string? actualTokenType, Exception? innerException)
+        public UnexpectedTokenTypeException(string? expectedTokenType, string? actualTokenType, Exception? innerException)
             : base($"Expected token type '{expectedTokenType}' but received '{actualTokenType}'.", innerException)
         {
             ExpectedTokenType = expectedTokenType;

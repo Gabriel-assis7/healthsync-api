@@ -48,7 +48,7 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
         /// <param name="tokenType">The type of token that was revoked.</param>
         /// <param name="revokedAt">The UTC time when the token was revoked.</param>
         /// <param name="reason">The reason for revocation (e.g., "UserLoggedOut", "PasswordChanged").</param>
-        public RevokedTokenException(string? tokenType, DateTime revokedAt, string? reason = null)
+        public RevokedTokenException(string? tokenType, DateTimeOffset revokedAt, string? reason = null)
             : base(tokenType, $"Token revoked at {revokedAt:O}. Reason: {reason}")
         {
             RevokedAt = revokedAt;
@@ -62,7 +62,7 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
         /// <param name="revokedAt">The UTC time when the token was revoked.</param>
         /// <param name="reason">The reason for revocation.</param>
         /// <param name="innerException">The inner exception that caused this exception.</param>
-        public RevokedTokenException(string? tokenType, DateTime revokedAt, string? reason, Exception? innerException)
+        public RevokedTokenException(string? tokenType, DateTimeOffset revokedAt, string? reason, Exception? innerException)
             : base(tokenType, $"Token revoked at {revokedAt:O}. Reason: {reason}", innerException)
         {
             RevokedAt = revokedAt;
@@ -72,7 +72,7 @@ namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
         /// <summary>
         /// Gets the UTC time when the token was revoked, if available.
         /// </summary>
-        public DateTime? RevokedAt { get; private set; }
+        public DateTimeOffset? RevokedAt { get; private set; }
 
         /// <summary>
         /// Gets the reason for revocation (e.g., "UserLoggedOut", "PasswordChanged", "AdminRevoked").
