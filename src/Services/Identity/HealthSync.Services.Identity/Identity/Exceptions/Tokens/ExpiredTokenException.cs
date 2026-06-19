@@ -1,7 +1,7 @@
 using System;
 using HealthSync.BuildingBlocks.Abstraction.Exceptions.Authentication;
 
-namespace HealthSync.Services.Identity.Identity.Core.Exceptions.Tokens
+namespace HealthSync.Services.Identity.Identity.Exceptions.Tokens
 {
     [Serializable]
     public sealed class ExpiredTokenException : InvalidTokenException

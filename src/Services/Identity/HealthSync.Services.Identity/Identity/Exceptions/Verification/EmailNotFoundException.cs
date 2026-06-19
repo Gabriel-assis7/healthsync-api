@@ -1,6 +1,6 @@
 using HealthSync.BuildingBlocks.Abstraction.Exceptions.Validation;
 
-namespace HealthSync.Services.Identity.Identity.Core.Exceptions
+namespace HealthSync.Services.Identity.Identity.Exceptions.Verification
 {
     [Serializable]
     public sealed class EmailNotFoundException : InvalidCredentialsException
