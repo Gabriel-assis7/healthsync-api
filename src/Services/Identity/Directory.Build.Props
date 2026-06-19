@@ -1,0 +1,11 @@
+<!--https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build-->
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../../'))" />
+
+  <ItemGroup>
+    <Using Include="System.Collections.Generic" />
+    <Using Include="Microsoft.Extensions.Hosting" />
+    <Using Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+
+</Project>
