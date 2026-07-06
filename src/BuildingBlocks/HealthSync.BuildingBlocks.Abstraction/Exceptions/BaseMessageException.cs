@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthSync.BuildingBlocks.Abstraction.Exceptions
 {
     [Serializable]
