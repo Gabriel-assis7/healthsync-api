@@ -1,6 +1,6 @@
 using HealthSync.BuildingBlocks.Abstraction.Exceptions.Authentication;
 
-namespace HealthSync.Services.Identity.Identity.Exceptions.Verification
+namespace HealthSync.Services.Identity.Api.Exceptions.Verification
 {
     [Serializable]
     public sealed class EmailAlreadyVerifiedException : EntityAlreadyVerifiedException

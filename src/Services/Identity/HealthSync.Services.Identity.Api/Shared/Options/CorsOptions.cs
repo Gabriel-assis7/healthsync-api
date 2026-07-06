@@ -1,4 +1,4 @@
-namespace HealthSync.Services.Identity.Shared.Options;
+namespace HealthSync.Services.Identity.Api.Shared.Options;
 
 public sealed class CorsOptions
 {
