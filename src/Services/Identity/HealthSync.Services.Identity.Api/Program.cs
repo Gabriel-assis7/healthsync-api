@@ -1,9 +1,14 @@
+using HealthSync.BuildingBlocks.Abstraction.Behaviors;
+using HealthSync.BuildingBlocks.Abstraction.Cqrs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddPipelineBehaviors();
+builder.Services.AddTransient<IQueryHandler<SampleQuery, string>, SampleQueryHandler>();
 
 var app = builder.Build();
 
@@ -36,9 +41,36 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapGet("/diagnostics", async (IPipelineInvoker invoker, IServiceProvider serviceProvider, CancellationToken cancellationToken) =>
+{
+    var query = new SampleQuery();
+
+    return await invoker.InvokeAsync<SampleQuery, string>(
+        query,
+        () =>
+        {
+            var handler = serviceProvider.GetRequiredService<IQueryHandler<SampleQuery, string>>();
+            return handler.HandleAsync(query, cancellationToken);
+        },
+        cancellationToken);
+})
+.WithName("GetDiagnostics")
+.WithOpenApi();
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+public sealed record SampleQuery : IQuery<string>;
+
+public sealed class SampleQueryHandler : IQueryHandler<SampleQuery, string>
+{
+    public Task<string> HandleAsync(SampleQuery query, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query);
+        return Task.FromResult("Minimal API pipeline executed successfully.");
+    }
 }
