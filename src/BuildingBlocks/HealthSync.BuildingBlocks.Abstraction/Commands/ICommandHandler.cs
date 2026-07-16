@@ -1,4 +1,4 @@
-namespace HealthSync.BuildingBlocks.Abstraction.Commands;
+namespace HealthSync.BuildingBlocks.Abstraction.Commands
 {
     public interface ICommandHandler<in TCommand, TResult>
         where TCommand : ICommand<TResult>

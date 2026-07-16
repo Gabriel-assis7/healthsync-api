@@ -1,82 +1,97 @@
 using System.Diagnostics;
-using Microsoft.Extensions.Logging;
+using HealthSync.BuildingBlocks.Abstraction.Diagnostics;
 using HealthSync.BuildingBlocks.Abstraction.Diagnostics.Commands;
 using HealthSync.BuildingBlocks.Abstraction.Diagnostics.Constants;
+using MediatR;
 
 namespace HealthSync.BuildingBlocks.Abstraction.Behaviors
 {
     public class DiagnosticsPipeline<TRequest, TResponse>(
-        ILogger<DiagnosticsPipelineBehavior<TRequest, TResponse>> logger,
-        StartCommandActivity startCommandActivity
-    ) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+        StartCommandActivity startCommandActivity,
+        CommandHandlerMetrics commandHandlerMetrics
+    ) : DiagnosticPipelineBase, IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    where TResponse : notnull
     {
-
-        private readonly ILogger<DiagnosticsPipelineBehavior<TRequest, TResponse>> _logger;
-
-        public DiagnosticsPipelineBehavior(ILogger<DiagnosticsPipelineBehavior<TRequest, TResponse>> logger)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _logger = logger;
-        }
-
-        public async Task<TResponse> HandleAsync(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken = default)
-        {
-            var id = new Guid();
+            var id = Guid.NewGuid();
             var sw = new Stopwatch();
-            var isCommand = request is ICommand;
-            var isQuery = request is IQuery;
+
+            commandHandlerMetrics.StartExecuting<TRequest>();
+
+            if (_logger.IsEnabled(DiagnosticListenerConstants.RequestStarted))
+            {
+                _logger.Write(DiagnosticListenerConstants.RequestStarted, new
+                {
+                    Id = id,
+                    RequestType = GetRequestType(request),
+                    RequestName = request.GetType().FullName,
+                    Request = request,
+                });
+            }
 
             try
             {
-                if (isCommand)
-                {
-                    sw.Start();
-                    _logger.Write(Tracing.Tracing.Application.Command.Name, typeof(TRequest).Name);
+                sw.Start();
 
-                    var result = await startCommandActivity.ExecuteCommandAsync(
-                        async (TRequest command,
-                        CancellationToken cancellationToken) =>
-                        {
-                            _logger.Write(Tracing.Tracing.Application.Command.Name, typeof(TRequest).Name);
-                            return await next(request, cancellationToken);
-                        }
-                    );
-                    sw.Stop();
-                    return result;
+                var commandResult = await startCommandActivity.ExecuteCommandAsync(
+                    request,
+                    _ => next(),
+                    cancellationToken
+                ).ConfigureAwait(false);
+
+                sw.Stop();
+
+                commandHandlerMetrics.FinishExecuting<TRequest>();
+
+                if (_logger.IsEnabled(DiagnosticListenerConstants.RequestCompleted))
+                {
+                    _logger.Write(DiagnosticListenerConstants.RequestCompleted, new
+                    {
+                        Id = id,
+                        RequestType = GetRequestType(request),
+                        RequestName = request.GetType().FullName,
+                        Request = request,
+                        Response = commandResult,
+                        Duration = sw.Elapsed,
+                    });
                 }
+
+                return commandResult;
             }
             catch (Exception e)
             {
                 sw.Stop();
-                if (_logger.IsEnabled(TracingTags.Tracing.Exception.Event))
+
+                commandHandlerMetrics.FailedCommand<TRequest>();
+
+                if (_logger.IsEnabled(DiagnosticListenerConstants.RequestError))
                 {
-                    _logger.Write(TracingTags.Tracing.Exception.Event, ActivityExceptionData(
-                        id,
-                        e,
-                        GetRequestType(request),
-                        sw.Elapsed.TotalMilliseconds
-                    ));
+                    _logger.Write(DiagnosticListenerConstants.RequestError, new
+                    {
+                        Id = id,
+                        RequestType = GetRequestType(request),
+                        RequestName = request.GetType().FullName,
+                        Request = request,
+                        Exception = e,
+                        Duration = sw.Elapsed,
+                    });
                 }
 
                 throw;
             }
-
-            sw.Stop();
-            return await next(request, cancellationToken);
+            finally
+            {
+                if (sw.IsRunning)
+                {
+                    sw.Stop();
+                }
+            }
         }
 
-        private static string GetRequestType(TRequest requestType)
+        private static string GetRequestType(TRequest request)
         {
-            if (requestType is null)
-            {
-                throw new ArgumentNullException(nameof(requestType));
-            }
-
-            return requestType switch
-            {
-                IQuery _ => "Query",
-                ICommand _ => "Command",
-                _ => "Unknown",
-            };
+            return request?.GetType().Name ?? "Unknown";
         }
     }
 }

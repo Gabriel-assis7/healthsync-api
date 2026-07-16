@@ -1,20 +1,17 @@
-using BuildingBlocks.Abstractions.Diagnostics.Data;
-
+using System.Diagnostics;
 namespace HealthSync.BuildingBlocks.Abstraction.Diagnostics;
 
 public interface IActivityRunner
 {
-    Activity? CreateAndStartActivity(ActivityData activityInfo);
-
     Task ExecuteActivityAsync(
         ActivityData activityInfo,
-        Func<Activity?, CancellationToken, Task> action,
+        Func<Activity?, CancellationToken, Task> commandAction,
         CancellationToken cancellationToken = default
     );
 
-    Task<TResult?> ExecuteActivityAsync<TResult>(
+    Task<TResult> ExecuteActivityAsync<TResult>(
         ActivityData activityInfo,
-        Func<Activity?, CancellationToken, Task<TResult>> action,
+        Func<Activity?, CancellationToken, Task<TResult>> commandAction,
         CancellationToken cancellationToken = default
     );
 }

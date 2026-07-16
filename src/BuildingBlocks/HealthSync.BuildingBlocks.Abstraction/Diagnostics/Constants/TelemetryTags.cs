@@ -16,42 +16,15 @@ public static class TelemetryTags
     {
         public static class Application
         {
-            private const string consumer = "application.consumer";
-            private const string producer = "application.producer";
-
-            public static string Consumer => consumer;
-
-            public static string Producer => producer;
-
+            public const string consumer = "application.consumer";
+            public const string producer = "application.producer";
             public static class Command
             {
-                private const string name = "command.name";
-                private const string type = "command.type";
+                public const string name = "command.name";
+                public const string type = "command.type";
 
-                private const string handler = "command.handler";
-                private const string handlerType = "command.handler.type";
-
-                private const string correlationId = "command.correlation.id";
-                private const string causationId = "command.causation.id";
-
-                private const string tenantId = "command.tenant.id";
-                private const string userId = "command.user.id";
-
-                public static string Name => name;
-
-                public static string Type => type;
-
-                public static string Handler => handler;
-
-                public static string HandlerType => handlerType;
-
-                public static string CorrelationId => correlationId;
-
-                public static string CausationId => causationId;
-
-                public static string TenantId => tenantId;
-
-                public static string UserId => userId;
+                public const string handler = "command.handler";
+                public const string handlerType = "command.handler.type";
             }
         }
 
@@ -61,11 +34,21 @@ public static class TelemetryTags
             public const string type = "exception.type";
             public const string message = "exception.message";
             public const string stacktrace = "exception.stacktrace";
+        }
+    }
 
-            public static string Event => eventName;
-            public static string ExceptionType => type;
-            public static string ExceptionMessage => message;
-            public static string ExceptionStacktrace => stacktrace;
+    public static class Metrics
+    {
+        public static class Application
+        {
+            public static class Commands
+            {
+                public const string activeCount = "application.commands.active.count";
+                public const string totalExecutedCount = "application.commands.total.count";
+                public const string successCount = "application.commands.success.count";
+                public const string failedCount = "application.commands.failed.count";
+                public const string handlerDuration = "application.commands.handler.duration";
+            }
         }
     }
 }
