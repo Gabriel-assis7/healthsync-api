@@ -1,6 +1,4 @@
-using HealthSync.Services.Identity.Identity.Core.Cqrs;
-
-namespace HealthSync.BuildingBlocks.Abstraction.Cqrs
+namespace HealthSync.BuildingBlocks.Abstraction.Commands
 {
     public interface ICommandHandler<in TCommand, TResult>
         where TCommand : ICommand<TResult>
