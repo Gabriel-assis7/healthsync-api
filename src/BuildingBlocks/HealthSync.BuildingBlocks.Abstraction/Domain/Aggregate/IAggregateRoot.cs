@@ -1,6 +1,6 @@
 using HealthSync.BuildingBlocks.Abstraction.Events;
 
-namespace HealthSync.BuildingBlocks.Core.Domain.Aggregate;
+namespace HealthSync.BuildingBlocks.Abstraction.Domain.Aggregate;
 
 public interface IAggregateRoot
 {

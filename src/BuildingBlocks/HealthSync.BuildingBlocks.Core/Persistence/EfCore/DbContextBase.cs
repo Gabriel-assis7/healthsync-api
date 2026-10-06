@@ -3,10 +3,10 @@ namespace HealthSync.BuildingBlocks.Core.Persistence.EfCore;
 using System.Collections.Immutable;
 using System.Data;
 using System.Linq.Expressions;
+using HealthSync.BuildingBlocks.Abstraction.Domain.Aggregate;
+using HealthSync.BuildingBlocks.Abstraction.Domain.Entities;
 using HealthSync.BuildingBlocks.Abstraction.Events;
 using HealthSync.BuildingBlocks.Abstraction.Persistence.EfCore;
-using HealthSync.BuildingBlocks.Core.Domain.Aggregate;
-using HealthSync.BuildingBlocks.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

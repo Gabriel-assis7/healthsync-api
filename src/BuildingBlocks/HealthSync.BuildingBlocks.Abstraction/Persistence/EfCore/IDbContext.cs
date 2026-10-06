@@ -1,10 +1,9 @@
 using System.Data;
-using HealthSync.BuildingBlocks.Abstraction.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthSync.BuildingBlocks.Abstraction.Persistence.EfCore;
 
-public interface IDbContext : ITxDbContextExecute, IRetryDbContextExecution, IDomainEventsAccessor
+public interface IDbContext : ITxDbContextExecute, IRetryDbContextExecution
 {
     DbSet<TEntity> Set<TEntity>()
         where TEntity : class;

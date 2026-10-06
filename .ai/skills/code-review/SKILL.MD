@@ -1,3 +1,8 @@
+---
+name: code-review
+description: Reviews C# and .NET 8 code for modern language, async, EF Core, ASP.NET Core, dependency injection, and LINQ best practices.
+---
+
 # C# / .NET Code Review Guide
 
 > A comprehensive C# / .NET 8 code review guide covering C# 12 language features, asynchronous programming, EF Core performance, ASP.NET Core best practices, dependency injection, LINQ, and modern coding guidelines.

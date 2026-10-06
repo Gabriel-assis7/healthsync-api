@@ -1,10 +1,9 @@
 using HealthSync.BuildingBlocks.Abstraction.Events;
-using HealthSync.BuildingBlocks.Core.Domain.Entities;
 
-namespace HealthSync.BuildingBlocks.Core.Domain.Aggregate;
+namespace HealthSync.BuildingBlocks.Abstraction.Domain.Aggregate;
 
 [Serializable]
-public abstract class AggregateRoot : BaseEntity, IAggregateRoot
+public abstract class AggregateRoot : IAggregateRoot
 {
     private readonly List<IAggregateEvent> _aggregateEvents = [];
 

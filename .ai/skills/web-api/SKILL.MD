@@ -1,5 +1,5 @@
 ---
-name: dotnet-webapi
+name: web-api
 description: >
   Guides creation and modification of ASP.NET Core Web API endpoints with
   correct HTTP semantics, OpenAPI metadata, and error handling.

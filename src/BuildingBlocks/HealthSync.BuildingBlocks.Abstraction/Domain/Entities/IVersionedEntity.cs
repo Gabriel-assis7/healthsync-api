@@ -1,4 +1,4 @@
-namespace HealthSync.BuildingBlocks.Core.Domain.Entities;
+namespace HealthSync.BuildingBlocks.Abstraction.Domain.Entities;
 
 public interface IVersionedEntity
 {
