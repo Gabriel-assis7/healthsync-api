@@ -10,15 +10,15 @@ namespace HealthSync.BuildingBlocks.Abstraction.Exceptions
             IsTransient = isTransient;
         }
 
-        public ConnectionException(string? message, bool isTransient = false)
+        public ConnectionException(string message, bool isTransient = false)
             : base(message)
         {
             IsTransient = isTransient;
         }
 
         public ConnectionException(
-            string? messaege,
-            Exception? innerException,
+            string messaege,
+            Exception innerException,
             bool isTransient = false
         )
             : base(messaege, innerException)
