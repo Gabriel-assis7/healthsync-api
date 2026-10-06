@@ -5,10 +5,10 @@ namespace HealthSync.BuildingBlocks.Abstraction.Exceptions
     {
         public BaseMessageException() { }
 
-        public BaseMessageException(string? message)
+        public BaseMessageException(string message)
             : base(message) { }
 
-        public BaseMessageException(string? message, Exception? innerException)
+        public BaseMessageException(string message, Exception innerException)
             : base(message, innerException) { }
     }
 }
