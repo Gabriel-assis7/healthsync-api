@@ -1,11 +1,11 @@
-namespace HEalthSync.BuildingBlocks.Abstraction.Domain;
+namespace HealthSync.BuildingBlocks.Abstraction.Domain;
 
 public abstract record Identity<TId>
 {
-    public TId Value { get; init; } = default!;
+    public TId Id { get; init; } = default!;
 
     public static implicit operator TId(Identity<TId> identityId)
     {
-        return identityId.Value;
+        return identityId.Id;
     }
 }
